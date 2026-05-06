@@ -1,0 +1,155 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.sidebar {
+  width: 280px;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.avatar {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.4rem;
+  border-radius: 50%;
+}
+
+.userInfo h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.userInfo p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--muted-text);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.navItem:hover {
+  background: var(--glass-border);
+  color: var(--text-color);
+}
+
+.navItem.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Vendor specific active state */
+.navItem.vendorActive {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* Admin specific active state */
+.navItem.adminActive {
+  background: #ef4444;
+  color: white;
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.mainContent {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  overflow-y: auto;
+}
+
+.mainContent h1 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statCard h3 {
+  font-size: 1rem;
+  color: var(--muted-text);
+  font-weight: 500;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-color);
+}
+
+.recentActivity {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+}
+
+.recentActivity h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
