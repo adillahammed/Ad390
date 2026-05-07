@@ -11,7 +11,7 @@ export default function Footer() {
               Ad<span className="text-gradient">Scape</span>
             </Link>
             <p className={styles.description}>
-              The premium platform for discovering, booking, and managing high-value billboard spaces globally.
+              The premium platform for discovering, booking, and managing high-value billboard spaces in India.
             </p>
           </div>
           

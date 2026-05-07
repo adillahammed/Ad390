@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning>
       <body className={inter.variable}>
         <ThemeProvider>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>

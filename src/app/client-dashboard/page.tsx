@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { LogOut, User, Search, Bookmark, MessageSquare } from 'lucide-react';
+import { formatINR } from '@/lib/currency';
 import styles from '@/styles/dashboard.module.css';
 
 export default function ClientDashboard() {
@@ -50,7 +51,7 @@ export default function ClientDashboard() {
           </div>
           <div className={`${styles.statCard} glass`}>
             <h3>Total Spent</h3>
-            <div className={styles.statNumber}>$4,500</div>
+            <div className={styles.statNumber}>{formatINR(45000)}</div>
           </div>
         </div>
         

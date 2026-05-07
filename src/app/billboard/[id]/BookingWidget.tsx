@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Phone } from 'lucide-react';
+import { Calendar, Phone, Percent } from 'lucide-react';
+import { formatINR, calculateGST } from '@/lib/currency';
 import styles from './page.module.css';
 
 export default function BookingWidget({ billboard }: { billboard: any }) {
@@ -49,15 +50,19 @@ export default function BookingWidget({ billboard }: { billboard: any }) {
         <div className={styles.summary}>
           <div className={styles.summaryRow}>
             <span>{isBidding ? 'Current Highest Bid' : 'Price per day'}</span>
-            <span>${isBidding ? billboard.pricePerDay + 500 : billboard.pricePerDay}</span>
+            <span>{formatINR(isBidding ? billboard.pricePerDay + 500 : billboard.pricePerDay)}</span>
           </div>
           <div className={styles.summaryRow}>
             <span>Days</span>
-            <span>-</span>
+            <span>1 (Sample)</span>
+          </div>
+          <div className={styles.summaryRow}>
+            <span>GST (18%)</span>
+            <span>{formatINR(calculateGST(isBidding ? billboard.pricePerDay + 500 : billboard.pricePerDay).gstAmount)}</span>
           </div>
           <div className={`${styles.summaryRow} ${styles.totalRow}`}>
-            <span>Total Est.</span>
-            <span>$0</span>
+            <span>Total Incl. GST</span>
+            <span>{formatINR(calculateGST(isBidding ? billboard.pricePerDay + 500 : billboard.pricePerDay).totalAmount)}</span>
           </div>
         </div>
         

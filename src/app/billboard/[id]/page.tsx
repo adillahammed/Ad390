@@ -1,9 +1,12 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, ArrowLeft, Maximize, Users, Info } from 'lucide-react';
+import { MapPin, ArrowLeft, Maximize, Users, Info, Building2 } from 'lucide-react';
+import { formatINR } from '@/lib/currency';
+import Image from 'next/image';
 import styles from './page.module.css';
 import BookingWidget from './BookingWidget';
+import BillboardImagePreview from './BillboardImagePreview';
 
 export default async function BillboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -24,10 +27,7 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
   return (
     <div className={styles.detailPage}>
       <div className={styles.heroSection}>
-        <div className={styles.heroImageContainer}>
-          <img src={billboard.image} alt={billboard.title} className={styles.heroImage} />
-          <div className={styles.heroOverlay} />
-        </div>
+        <BillboardImagePreview src={billboard.image} title={billboard.title} />
         
         <div className={`container ${styles.heroContent}`}>
           <Link href="/locations" className={`${styles.backBtn} glass`}>
@@ -41,12 +41,17 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
               <p className={styles.location}>
                 <MapPin size={20} /> {billboard.location}, {billboard.city}
               </p>
+              {billboard.landmark && (
+                <p className={styles.landmark}>
+                  <Building2 size={16} /> Near {billboard.landmark}
+                </p>
+              )}
             </div>
             
             <div className={`${styles.priceCard} glass`}>
               <div className={styles.priceHeader}>Base Price per day</div>
               <div className={styles.priceAmount}>
-                ${billboard.pricePerDay}
+                {formatINR(billboard.pricePerDay)}
               </div>
               <div className={styles.availability}>
                 {billboard.available ? (

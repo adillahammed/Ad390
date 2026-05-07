@@ -2,17 +2,45 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Search, MapPin, TrendingUp, Shield } from 'lucide-react';
+import { Search, MapPin, TrendingUp, Shield, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import styles from './page.module.css';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import LocationSelector from '@/components/LocationSelector';
+
 export default function Home() {
+  const router = useRouter();
+  const [selection, setSelection] = useState<{ districtId: string | null, placeId: string | null }>({
+    districtId: null,
+    placeId: null
+  });
+
+  const handleSearch = () => {
+    if (selection.districtId) {
+      const params = new URLSearchParams();
+      params.append('districtId', selection.districtId);
+      if (selection.placeId) params.append('placeId', selection.placeId);
+      router.push(`/locations?${params.toString()}`);
+    } else {
+      router.push('/locations');
+    }
+  };
+
   return (
     <div className={styles.home}>
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroBg}>
-          <div className={styles.gradientOrb1} />
-          <div className={styles.gradientOrb2} />
+          <Image 
+            src="/images/locations/kochi.png" 
+            alt="Kochi Skyline" 
+            fill 
+            className={styles.heroImage}
+            priority
+          />
+          <div className={styles.heroOverlay} />
         </div>
         
         <div className={`container ${styles.heroContent}`}>
@@ -30,24 +58,59 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Discover, book, and manage premium billboard spaces globally with our futuristic booking platform.
+            Discover, book, and manage premium billboard spaces across India with our futuristic booking platform.
           </motion.p>
           
           <motion.div 
-            className={`${styles.searchBar} glass`}
+            className={`${styles.homeSearchWrapper} glass`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className={styles.searchInputGroup}>
-              <MapPin className={styles.searchIcon} size={20} />
-              <input type="text" placeholder="Where do you want to advertise?" className={styles.searchInput} />
-            </div>
-            <button className={`${styles.searchBtn} glow`}>
+            <LocationSelector onSelectionChange={(d, p) => setSelection({ districtId: d, placeId: p })} />
+            <button className={`${styles.searchBtn} glow`} onClick={handleSearch}>
               <Search size={20} />
-              <span>Search</span>
+              <span>Find Billboards</span>
             </button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Location Showcase */}
+      <section className={styles.locationShowcase}>
+        <div className="container">
+          <div className={styles.sectionHeader}>
+            <h2>Explore Top <span className="text-gradient">Locations</span></h2>
+            <p className="text-muted">High-impact zones across Kerala's major hubs.</p>
+          </div>
+          
+          <div className={styles.locationGrid}>
+            {[
+              { name: 'Kochi', image: '/images/locations/kochi.png', count: 45, slug: 'kochi' },
+              { name: 'Kozhikode', image: '/images/locations/kozhikode.png', count: 32, slug: 'kozhikode' },
+              { name: 'Trivandrum', image: '/images/locations/trivandrum.png', count: 28, slug: 'thiruvananthapuram' },
+            ].map((loc, i) => (
+              <motion.div 
+                key={loc.name}
+                className={`${styles.locationCard} glass`}
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className={styles.locationImageWrapper}>
+                  <Image src={loc.image} alt={loc.name} fill className={styles.locationImage} />
+                  <div className={styles.locationOverlay}>
+                    <h3>{loc.name}</h3>
+                    <p>{loc.count} Active Spots</p>
+                    <Link href={`/locations/${loc.slug}`} className={styles.exploreLink}>
+                      View Map <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

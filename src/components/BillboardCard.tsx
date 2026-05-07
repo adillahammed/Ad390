@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Users, Maximize, CircleDollarSign } from 'lucide-react';
+import { MapPin, Users, Maximize, CircleDollarSign, Star, Zap, Building2 } from 'lucide-react';
 import { Billboard } from '@/data/mockBillboards';
+import { formatINR } from '@/lib/currency';
 import styles from './BillboardCard.module.css';
 
 interface Props {
@@ -10,11 +11,23 @@ interface Props {
 
 export default function BillboardCard({ billboard }: Props) {
   return (
-    <Link href={`/locations/${billboard.id}`} className={`${styles.card} glass`}>
+    <Link href={`/billboard/${billboard.id}`} className={`${styles.card} glass`}>
       <div className={styles.imageContainer}>
-        {/* We use standard img instead of next/image for external URLs to avoid config issues initially */}
-        <img src={billboard.image} alt={billboard.title} className={styles.image} />
+        <Image 
+          src={billboard.image} 
+          alt={billboard.title} 
+          width={400} 
+          height={250} 
+          className={styles.image}
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwMwFBy6fQAAAABJRU5ErkJggg=="
+        />
         <div className={styles.typeTag}>{billboard.type}</div>
+        {billboard.isPremium && (
+          <div className={styles.premiumBadge}>
+            <Zap size={12} fill="currentColor" /> Premium Zone
+          </div>
+        )}
         {!billboard.available && <div className={styles.bookedTag}>Booked</div>}
       </div>
       
@@ -22,7 +35,7 @@ export default function BillboardCard({ billboard }: Props) {
         <div className={styles.header}>
           <h3 className={styles.title}>{billboard.title}</h3>
           <p className={styles.price}>
-            <span className={styles.amount}>${billboard.pricePerDay}</span>
+            <span className={styles.amount}>{formatINR(billboard.pricePerDay)}</span>
             <span className={styles.unit}>/day</span>
           </p>
         </div>
@@ -30,6 +43,11 @@ export default function BillboardCard({ billboard }: Props) {
         <p className={styles.location}>
           <MapPin size={16} /> {billboard.location}, {billboard.city}
         </p>
+        {billboard.landmark && (
+          <p className={styles.cardLandmark}>
+            <Building2 size={14} /> {billboard.landmark}
+          </p>
+        )}
         
         <div className={styles.stats}>
           <div className={styles.statItem}>

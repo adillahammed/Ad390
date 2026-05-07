@@ -51,23 +51,73 @@ model Admin {
 model Billboard {
   id           String   @id @default(uuid())
   title        String
-  location     String
+  description  String?
+  location     String   // General area name
+  address      String?  // Exact address
   city         String
+  googleMapsUrl String?
   type         String   // e.g. Digital, Static, 3D Digital
   size         String
+  height       String?
   dailyTraffic Int
   pricePerDay  Float
-  image        String
-  tags         String   // JSON stringified array or comma separated
+  weeklyPrice  Float?
+  monthlyPrice Float?
+  image        String   // Main cover image
+  tags         String   // JSON stringified array
+  status       String   @default("PENDING") // PENDING, APPROVED, REJECTED
   available    Boolean  @default(true)
+  
+  // Advanced Metadata
+  landmark        String?
+  trafficLevel    String? // Low, Medium, High, Extreme
+  visibilityRating Int?   // 1-5
+  audienceType    String? // e.g. Corporate, Youth, General
+  lighting        Boolean @default(false)
+  
+  districtId   String
+  district     District @relation(fields: [districtId], references: [id])
+  
+  placeId      String
+  place        Place    @relation(fields: [placeId], references: [id])
   
   vendorId     String
   vendor       Vendor   @relation(fields: [vendorId], references: [id])
+  
+  media        BillboardMedia[]
   
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   
   bookings     Booking[]
+}
+
+model BillboardMedia {
+  id          String    @id @default(uuid())
+  url         String
+  type        String    @default("IMAGE") // IMAGE, VIDEO
+  billboardId String
+  billboard   Billboard @relation(fields: [billboardId], references: [id], onDelete: Cascade)
+}
+
+model District {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  slug       String      @unique
+  image      String?
+  places     Place[]
+  billboards Billboard[]
+}
+
+model Place {
+  id         String      @id @default(uuid())
+  name       String
+  slug       String
+  districtId String
+  district   District    @relation(fields: [districtId], references: [id])
+  billboards Billboard[]
+
+  @@unique([districtId, slug])
 }
 
 model Booking {

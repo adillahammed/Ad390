@@ -1,10 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Building, LayoutList, PieChart, DollarSign } from 'lucide-react';
+import VendorSidebar from '@/components/vendor/VendorSidebar';
+import VendorStats from '@/components/vendor/VendorStats';
+import BillboardList from '@/components/vendor/BillboardList';
+import BillboardForm from '@/components/vendor/BillboardForm';
 import styles from '@/styles/dashboard.module.css';
 
 export default function VendorDashboard() {
+  const [activeTab, setActiveTab] = useState('analytics');
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -13,51 +18,53 @@ export default function VendorDashboard() {
     router.refresh();
   };
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'analytics':
+        return (
+          <>
+            <h1>Vendor Overview</h1>
+            <VendorStats />
+            <div className={`${styles.recentActivity} glass`}>
+              <h2>System Alerts</h2>
+              <p className="text-muted">No critical alerts. Your billboards are performing well.</p>
+            </div>
+          </>
+        );
+      case 'listings':
+        return (
+          <>
+            <div className={styles.contentHeader}>
+              <h1>My Billboard Inventory</h1>
+              <button onClick={() => setActiveTab('add')} className={styles.primaryBtn}>
+                Add New Billboard
+              </button>
+            </div>
+            <BillboardList />
+          </>
+        );
+      case 'add':
+        return (
+          <>
+            <h1>Add New Billboard Listing</h1>
+            <BillboardForm onSuccess={() => setActiveTab('listings')} />
+          </>
+        );
+      default:
+        return <h1>Coming Soon</h1>;
+    }
+  };
+
   return (
     <div className={styles.dashboardContainer}>
-      <aside className={`${styles.sidebar} glass`}>
-        <div className={styles.sidebarHeader}>
-          <Building size={32} className={styles.avatar} style={{ background: 'var(--accent-color)' }} />
-          <div className={styles.userInfo}>
-            <h3>Vendor Panel</h3>
-            <p className="text-muted">Manage your inventory</p>
-          </div>
-        </div>
-        
-        <nav className={styles.nav}>
-          <a href="#" className={`${styles.navItem} ${styles.vendorActive}`}><PieChart size={20} /> Analytics</a>
-          <a href="#" className={styles.navItem}><LayoutList size={20} /> My Billboards</a>
-          <a href="#" className={styles.navItem}><DollarSign size={20} /> Earnings</a>
-        </nav>
-        
-        <div className={styles.sidebarFooter}>
-          <button onClick={handleLogout} className={styles.logoutBtn}>
-            <LogOut size={20} /> Logout
-          </button>
-        </div>
-      </aside>
+      <VendorSidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        onLogout={handleLogout} 
+      />
       
       <main className={styles.mainContent}>
-        <h1>Vendor Overview</h1>
-        <div className={styles.statsGrid}>
-          <div className={`${styles.statCard} glass`} style={{ borderTop: '4px solid var(--accent-color)' }}>
-            <h3>Total Billboards</h3>
-            <div className={styles.statNumber}>8</div>
-          </div>
-          <div className={`${styles.statCard} glass`} style={{ borderTop: '4px solid var(--accent-color)' }}>
-            <h3>Active Bookings</h3>
-            <div className={styles.statNumber}>5</div>
-          </div>
-          <div className={`${styles.statCard} glass`} style={{ borderTop: '4px solid var(--accent-color)' }}>
-            <h3>Monthly Revenue</h3>
-            <div className={styles.statNumber}>$12,400</div>
-          </div>
-        </div>
-        
-        <div className={`${styles.recentActivity} glass`}>
-          <h2>Pending Approvals</h2>
-          <p className="text-muted">You have no pending booking requests at this time.</p>
-        </div>
+        {renderContent()}
       </main>
     </div>
   );

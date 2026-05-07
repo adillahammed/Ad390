@@ -1,7 +1,41 @@
 .locationsPage {
-  padding-top: 8rem;
-  padding-bottom: 6rem;
   min-height: 100vh;
+  padding-bottom: 6rem;
+}
+
+.heroBanner {
+  padding: 10rem 0 4rem;
+  margin-bottom: 4rem;
+  border-radius: 0 0 3rem 3rem;
+  background: radial-gradient(circle at top right, rgba(96, 165, 250, 0.1), transparent),
+              radial-gradient(circle at bottom left, rgba(167, 139, 250, 0.05), transparent);
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.heroContent h1 {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  line-height: 1.1;
+  max-width: 900px;
+}
+
+.heroContent p {
+  font-size: 1.2rem;
+  color: var(--muted-text);
+}
+
+.searchBox {
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: 2rem;
+  margin-top: 2rem;
 }
 
 .header {
@@ -9,18 +43,6 @@
   flex-direction: column;
   gap: 2rem;
   margin-bottom: 3rem;
-}
-
-@media (min-width: 768px) {
-  .header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-}
-
-.titleSection h1 {
-  margin-bottom: 0.5rem;
 }
 
 .controls {
@@ -180,4 +202,25 @@
 .mapPlaceholder h3 {
   color: var(--text-color);
   margin-bottom: 0.5rem;
+}
+
+.loadingState, .emptyState {
+  width: 100%;
+  padding: 4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted-text);
+}
+
+.loadingState svg {
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  color: var(--text-color);
+  font-size: 1.5rem;
 }

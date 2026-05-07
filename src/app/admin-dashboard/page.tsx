@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { LogOut, Shield, Users, Activity, Settings } from 'lucide-react';
+import { formatINR } from '@/lib/currency';
 import styles from '@/styles/dashboard.module.css';
 
 export default function AdminDashboard() {
@@ -42,7 +43,7 @@ export default function AdminDashboard() {
         <div className={styles.statsGrid}>
           <div className={`${styles.statCard} glass`} style={{ borderTop: '4px solid #ef4444' }}>
             <h3>Total Platform Revenue</h3>
-            <div className={styles.statNumber}>$450,200</div>
+            <div className={styles.statNumber}>{formatINR(45020000)}</div>
           </div>
           <div className={`${styles.statCard} glass`} style={{ borderTop: '4px solid #ef4444' }}>
             <h3>Active Users</h3>
