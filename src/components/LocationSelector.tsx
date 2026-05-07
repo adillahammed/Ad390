@@ -31,17 +31,19 @@ export default function LocationSelector({ onSelectionChange }: LocationSelector
   const [allPlaces, setAllPlaces] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchAllPlaces = async () => {
-      try {
-        const response = await fetch('/api/locations/all-places');
-        const data = await response.json();
-        setAllPlaces(data);
-      } catch (error) {
-        console.error('Error fetching all places:', error);
-      }
-    };
-    fetchAllPlaces();
-  }, []);
+    if (searchTerm.length > 1 && allPlaces.length === 0) {
+      const fetchAllPlaces = async () => {
+        try {
+          const response = await fetch('/api/locations/all-places');
+          const data = await response.json();
+          setAllPlaces(data);
+        } catch (error) {
+          console.error('Error fetching all places:', error);
+        }
+      };
+      fetchAllPlaces();
+    }
+  }, [searchTerm, allPlaces.length]);
 
   const suggestions = searchTerm.length > 1 
     ? allPlaces.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())).slice(0, 5)

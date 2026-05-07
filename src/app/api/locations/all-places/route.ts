@@ -9,7 +9,11 @@ export async function GET() {
       },
       orderBy: { name: 'asc' }
     });
-    return NextResponse.json(places);
+    return NextResponse.json(places, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=59'
+      }
+    });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch places' }, { status: 500 });
   }

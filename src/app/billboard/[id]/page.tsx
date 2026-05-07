@@ -13,21 +13,32 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
   
   const billboard = await prisma.billboard.findUnique({
     where: { id: resolvedParams.id },
-    include: { vendor: true }
+    include: { 
+      vendor: true,
+      media: true,
+      district: true,
+      place: true
+    }
   });
 
   if (!billboard) {
     notFound();
   }
 
-  // Serialize for Client Component (converts Dates to strings)
+  // Combine main image with media gallery
+  const allMedia = [
+    { url: billboard.image, type: 'IMAGE' },
+    ...billboard.media.map(m => ({ url: m.url, type: m.type }))
+  ];
+
+  // Serialize for Client Component
   const serializedBillboard = JSON.parse(JSON.stringify(billboard));
   const tags = billboard.tags ? JSON.parse(billboard.tags) : [];
 
   return (
     <div className={styles.detailPage}>
       <div className={styles.heroSection}>
-        <BillboardImagePreview src={billboard.image} title={billboard.title} />
+        <BillboardImagePreview media={allMedia} title={billboard.title} />
         
         <div className={`container ${styles.heroContent}`}>
           <Link href="/locations" className={`${styles.backBtn} glass`}>
@@ -88,13 +99,19 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
             </div>
             
             <div className={styles.description}>
-              <p>
-                The {billboard.title} is a premium {billboard.type.toLowerCase()} advertising space located in the heart of {billboard.city}. 
-                Positioned exactly at {billboard.location}, this billboard offers unparalleled visibility to a massive daily audience of {billboard.dailyTraffic.toLocaleString()} people.
-              </p>
-              <p>
-                Perfect for brand awareness campaigns, product launches, and high-impact visual storytelling. The modern infrastructure ensures your advertisement looks stunning day and night.
-              </p>
+              {billboard.description ? (
+                <div className={styles.fullDescription}>
+                  {billboard.description.split('\n').map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
+                </div>
+              ) : (
+                <p>
+                  The {billboard.title} is a premium {billboard.type.toLowerCase()} advertising space located in the heart of {billboard.city}. 
+                  Positioned exactly at {billboard.location}, this billboard offers unparalleled visibility to a massive daily audience of {billboard.dailyTraffic.toLocaleString()} people.
+                  Perfect for brand awareness campaigns, product launches, and high-impact visual storytelling.
+                </p>
+              )}
             </div>
             
             <div className={styles.tagsContainer}>

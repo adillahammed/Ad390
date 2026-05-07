@@ -101,16 +101,19 @@ export default function LocationsList({ initialBillboards }: { initialBillboards
             </div>
           ) : viewMode === 'grid' ? (
             <div className={styles.grid}>
-              {billboards.map((billboard, index) => (
-                <motion.div
-                  key={billboard.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <BillboardCard billboard={billboard} />
-                </motion.div>
-              ))}
+              {billboards.map((billboard, index) => {
+                const shouldAnimate = index < 12;
+                return (
+                  <motion.div
+                    key={billboard.id}
+                    initial={shouldAnimate ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={shouldAnimate ? { delay: index * 0.05 } : { duration: 0 }}
+                  >
+                    <BillboardCard billboard={billboard} />
+                  </motion.div>
+                );
+              })}
               {billboards.length === 0 && (
                 <div className={styles.emptyState}>
                   <h3>No spots found</h3>
