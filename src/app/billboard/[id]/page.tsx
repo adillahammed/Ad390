@@ -3,21 +3,23 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { MapPin, ArrowLeft, Maximize, Users, Info, Building2 } from 'lucide-react';
 import { formatINR } from '@/lib/currency';
-import Image from 'next/image';
 import styles from './page.module.css';
 import BookingWidget from './BookingWidget';
 import BillboardImagePreview from './BillboardImagePreview';
 
-export default async function BillboardDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = await params;
+// Next.js 15+ Params type
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function BillboardDetailPage({ params }: PageProps) {
+  const { id } = await params;
   
   const billboard = await prisma.billboard.findUnique({
-    where: { id: resolvedParams.id },
+    where: { id },
     include: { 
       vendor: true,
       media: true,
-      district: true,
-      place: true
     }
   });
 
@@ -31,8 +33,15 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
     ...billboard.media.map(m => ({ url: m.url, type: m.type }))
   ];
 
-  // Serialize for Client Component
-  const serializedBillboard = JSON.parse(JSON.stringify(billboard));
+  // Prepare safe data for client components (no Dates)
+  const safeBillboard = {
+    id: billboard.id,
+    title: billboard.title,
+    type: billboard.type,
+    pricePerDay: billboard.pricePerDay,
+    available: billboard.available,
+  };
+
   const tags = billboard.tags ? JSON.parse(billboard.tags) : [];
 
   return (
@@ -130,7 +139,7 @@ export default async function BillboardDetailPage({ params }: { params: Promise<
         </div>
         
         <div className={styles.rightColumn}>
-          <BookingWidget billboard={serializedBillboard} />
+          <BookingWidget billboard={safeBillboard} />
         </div>
       </div>
     </div>

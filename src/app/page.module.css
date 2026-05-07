@@ -219,11 +219,13 @@
 }
 
 .locationCard {
+  display: block;
   border-radius: var(--radius-xl);
   overflow: hidden;
   position: relative;
   height: 400px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .locationImageWrapper {

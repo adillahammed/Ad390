@@ -92,22 +92,23 @@ export default function Home() {
             ].map((loc, i) => (
               <motion.div 
                 key={loc.name}
-                className={`${styles.locationCard} glass`}
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className={styles.locationImageWrapper}>
-                  <Image src={loc.image} alt={loc.name} fill className={styles.locationImage} />
-                  <div className={styles.locationOverlay}>
-                    <h3>{loc.name}</h3>
-                    <p>{loc.count} Active Spots</p>
-                    <Link href={`/locations/${loc.slug}`} className={styles.exploreLink}>
-                      View Map <ArrowRight size={16} />
-                    </Link>
+                <Link href={`/locations/${loc.slug}`} className={`${styles.locationCard} glass`}>
+                  <div className={styles.locationImageWrapper}>
+                    <Image src={loc.image} alt={loc.name} fill className={styles.locationImage} />
+                    <div className={styles.locationOverlay}>
+                      <h3>{loc.name}</h3>
+                      <p>{loc.count} Active Spots</p>
+                      <div className={styles.exploreLink}>
+                        View Map <ArrowRight size={16} />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
